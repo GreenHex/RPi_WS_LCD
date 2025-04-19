@@ -1,1 +1,1 @@
-Status Display for Headless Rasbperrry Pi with Waveshare 1.3" 240x240 LCD Display
+Status Display for Headless Raspberry Pi With WaveShare 1.3" 240x240 LCD
