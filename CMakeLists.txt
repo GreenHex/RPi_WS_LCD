@@ -50,7 +50,7 @@ add_compile_definitions(LG_SET_INPUT)
 
 set(EXECUTABLE_OUTPUT_PATH ${CMAKE_SOURCE_DIR})
 
-target_include_directories(LCD PRIVATE ./examples)
+target_include_directories(LCD PRIVATE ./src)
 target_include_directories(LCD PRIVATE ./lib)
 target_include_directories(LCD PRIVATE ./lib/Config)
 target_include_directories(LCD PRIVATE ./lib/Fonts)
