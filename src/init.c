@@ -210,9 +210,8 @@ void LCD_1IN3_init(void)
 			end_u = usage.ru_utime;
 		}
 
-		DEBUG(LOG_INFO, "%s getrusage() gives %d seconds.\n", __progname, end_s.tv_sec + end_u.tv_sec - start_s.tv_sec - start_u.tv_sec);
-
-		sleep(10);
+		DEBUG("%s getrusage() gives %i seconds.\n", __progname, end_s.tv_sec + end_u.tv_sec - start_s.tv_sec - start_u.tv_sec);
+		DEV_Delay_ms(1000);
 	}
 
 	if (pthread_cancel(thread))
@@ -232,6 +231,7 @@ void LCD_1IN3_init(void)
 
 void HANDLER_set_LCD_brigtness(int signo)
 {
+#if USE_DIMMER
 	if (signo == SIGUSR1) // dim display
 	{
 		display_dim_idx = 0;
@@ -242,8 +242,21 @@ void HANDLER_set_LCD_brigtness(int signo)
 		display_dim_idx = display_dim_max;
 		display_toggle = true;
 	}
-
 	LCD_SetBacklight(display_dim[display_dim_idx]);
 
+#else
+	if (signo == SIGUSR1) // dim display
+	{
+		display_dim_idx = 0;
+		display_toggle = false;
+		LCD_BL_0;
+	}
+	else if (signo == SIGUSR2) // crank-up display
+	{
+		display_dim_idx = display_dim_max;
+		display_toggle = true;
+		LCD_BL_1;
+	}
+#endif
 	return;
 }
