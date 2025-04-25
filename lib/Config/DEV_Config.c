@@ -13,8 +13,8 @@
 
 int GPIO_Handle;
 int SPI_Handle;
-pthread_t *t1;
-UWORD pwm_dule = 100; // 1040
+pthread_t *p1;
+UWORD pwm_dule = 1023; // 100; // 1040
 void *BL_PWM(void *arg)
 {
 	UWORD i = 0;
@@ -22,10 +22,11 @@ void *BL_PWM(void *arg)
 	{
 		if (i > 64)
 			i = 0;
+		// lguSleep(0.001);
 		if (i < (pwm_dule / 16))
-			lgGpioWrite(GPIO_Handle, 18, LG_HIGH);
+			lgGpioWrite(GPIO_Handle, LCD_BL, LG_HIGH);
 		else
-			lgGpioWrite(GPIO_Handle, 18, LG_LOW);
+			lgGpioWrite(GPIO_Handle, LCD_BL, LG_LOW);
 	}
 }
 
@@ -57,12 +58,12 @@ void DEV_GPIO_Mode(UWORD Pin, UWORD Mode)
 	if (Mode == 0 || Mode == LG_SET_INPUT)
 	{
 		lgGpioClaimInput(GPIO_Handle, LFLAGS, Pin);
-		DEBUG("IN Pin = %d\r", Pin);
+		// printf("IN Pin = %d\r\n",Pin);
 	}
 	else
 	{
 		lgGpioClaimOutput(GPIO_Handle, LFLAGS, Pin, LG_LOW);
-		DEBUG("OUT Pin = %d\r", Pin);
+		// printf("OUT Pin = %d\r\n",Pin);
 	}
 }
 
@@ -80,6 +81,7 @@ static void DEV_GPIO_Init(void)
 	DEV_GPIO_Mode(LCD_RST, 1);
 	DEV_GPIO_Mode(LCD_DC, 1);
 	DEV_GPIO_Mode(LCD_BL, 1);
+	DEV_GPIO_Mode(18, 1); // will? this? even? work?
 
 	DEV_GPIO_Mode(KEY_UP_PIN, 0);
 	DEV_GPIO_Mode(KEY_DOWN_PIN, 0);
@@ -105,7 +107,7 @@ UBYTE DEV_ModuleInit(void)
 	fp = popen("cat /proc/cpuinfo | grep 'Raspberry Pi 5'", "r");
 	if (fp == NULL)
 	{
-		DEBUG("It is not possible to determine the model of the Raspberry PI");
+		DEBUG("It is not possible to determine the model of the Raspberry PI\n");
 		return -1;
 	}
 
@@ -114,7 +116,7 @@ UBYTE DEV_ModuleInit(void)
 		GPIO_Handle = lgGpiochipOpen(4);
 		if (GPIO_Handle < 0)
 		{
-			DEBUG("gpiochip4 Export Failed");
+			DEBUG("gpiochip4 Export Failed\n");
 			return -1;
 		}
 	}
@@ -123,13 +125,13 @@ UBYTE DEV_ModuleInit(void)
 		GPIO_Handle = lgGpiochipOpen(0);
 		if (GPIO_Handle < 0)
 		{
-			DEBUG("gpiochip0 Export Failed");
+			DEBUG("gpiochip0 Export Failed\n");
 			return -1;
 		}
 	}
-	SPI_Handle = lgSpiOpen(0, 0, 25000000, 0);
+	SPI_Handle = lgSpiOpen(0, 0, 10000000, 0);
 	DEV_GPIO_Init();
-	t1 = lgThreadStart(BL_PWM, "thread 1");
+	p1 = lgThreadStart(BL_PWM, "thread 1");
 
 	return 0;
 }
