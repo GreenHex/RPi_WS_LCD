@@ -12,6 +12,8 @@
 #ifndef _DEV_CONFIG_H_
 #define _DEV_CONFIG_H_
 
+#define USE_DEV_LIB 1
+
 #include "Debug.h"
 #include <lgpio.h>
 #define LFLAGS LG_SET_PULL_UP
@@ -33,8 +35,8 @@
 
 #define LCD_CS 8
 #define LCD_RST 27
-#define LCD_DC 17 // 25
-#define LCD_BL 18
+#define LCD_DC 25
+#define LCD_BL 24
 
 // LCD
 #define LCD_CS_0 DEV_Digital_Write(LCD_CS, 0)
@@ -57,7 +59,6 @@
 #define KEY1_PIN 21
 #define KEY2_PIN 20
 #define KEY3_PIN 16
-#define KEY4_PIN 26
 
 #define GET_KEY_UP DEV_Digital_Read(KEY_UP_PIN)
 #define GET_KEY_DOWN DEV_Digital_Read(KEY_DOWN_PIN)
@@ -67,7 +68,6 @@
 #define GET_KEY1 DEV_Digital_Read(KEY1_PIN)
 #define GET_KEY2 DEV_Digital_Read(KEY2_PIN)
 #define GET_KEY3 DEV_Digital_Read(KEY3_PIN)
-#define GET_KEY4 DEV_Digital_Read(KEY4_PIN)
 
 #define LCD_SetBacklight(Value) DEV_SetBacklight(Value)
 
