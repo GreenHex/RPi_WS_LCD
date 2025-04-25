@@ -189,11 +189,12 @@ void *check_keys(void *)
 {
 	while (1)
 	{
+#if USE_DIMMER
 		if (!GET_KEY1)
 		{
 			display_dim_idx = (display_toggle = !display_toggle) ? display_dim_max : 0;
 			LCD_SetBacklight(display_dim[display_dim_idx]);
-			sleep(1);
+			DEV_Delay_ms(100);
 		}
 		else if (!GET_KEY2)
 		{
@@ -208,8 +209,17 @@ void *check_keys(void *)
 				display_toggle = true;
 			}
 			LCD_SetBacklight(display_dim[display_dim_idx]);
-			sleep(1);
+			DEV_Delay_ms(100);
 		}
-		usleep(1000);
+#else
+		if (!GET_KEY1)
+		{
+			(display_toggle = !display_toggle) ? LCD_BL_1 : LCD_BL_0;
+			// DEV_SetBacklight(100);
+			DEV_Delay_ms(100);
+		}
+
+#endif
+		DEV_Delay_ms(500);
 	}
 }
