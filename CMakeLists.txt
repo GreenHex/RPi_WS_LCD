@@ -45,8 +45,9 @@ add_executable(LCD
 set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wall -g")
 
 add_compile_definitions(USE_DEV_LIB)
-add_compile_definitions(LG_SET_INPUT)
+# add_compile_definitions(LG_SET_INPUT)
 # add_compile_definitions(USE_DEBUG)
+add_compile_definitions(USE_DIMMER)
 
 set(EXECUTABLE_OUTPUT_PATH ${CMAKE_SOURCE_DIR})
 
